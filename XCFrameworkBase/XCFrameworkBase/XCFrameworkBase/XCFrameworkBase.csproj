@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{E6DFBA0D-3C24-4008-B0AD-4D5BD662CA57}</ProjectGuid>
+    <ProjectGuid>{B7F835E1-2034-4CFB-8380-BBD63DF3741A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>XCFrameworkBase</RootNamespace>
@@ -32,37 +32,54 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Base\EventPool\CEventArgsBase.cs" />
-    <Compile Include="Base\EventPool\CEventPool.cs" />
-    <Compile Include="Base\EventPool\CEventPool.Event.cs" />
-    <Compile Include="Base\EventPool\CFrameWorkEventArgs.cs" />
-    <Compile Include="Base\ReferencePool\CReferencePool.cs" />
-    <Compile Include="Base\ReferencePool\CReferencePool.ReferenceCollection.cs" />
-    <Compile Include="Base\ReferencePool\IReference.cs" />
-    <Compile Include="Base\TaskPool\CTaskBase.cs" />
-    <Compile Include="Base\TaskPool\CTaskPool.cs" />
-    <Compile Include="Base\TaskPool\ITaskAgent.cs" />
-    <Compile Include="Base\UtilityTools\CGameFrameworkEntry.cs" />
-    <Compile Include="Base\UtilityTools\CGameFrameworkModule.cs" />
-    <Compile Include="Base\UtilityTools\GameFrameworkException.cs" />
-    <Compile Include="Base\UtilityTools\Text\CUtility.Text.cs" />
-    <Compile Include="Base\UtilityTools\Text\CUtility.Text.ITextHelper.cs" />
-    <Compile Include="Download\CDownloadEvent.cs" />
-    <Compile Include="Download\CDownloadMgr.DownloadAgent.cs" />
-    <Compile Include="Download\CDownloadMgr.DownloadTask.cs" />
-    <Compile Include="Download\CDownloadMgr.cs" />
-    <Compile Include="Download\IDownloadAgentHelper.cs" />
-    <Compile Include="Download\IDownloadMgr.cs" />
+    <Compile Include="Code\Base\DataStruct\TypeNamePair.cs" />
+    <Compile Include="Code\Base\EventPool\CEventArgsBase.cs" />
+    <Compile Include="Code\Base\EventPool\CEventPool.cs" />
+    <Compile Include="Code\Base\EventPool\CEventPool.Event.cs" />
+    <Compile Include="Code\Base\EventPool\CFrameWorkEventArgs.cs" />
+    <Compile Include="Code\Base\ReferencePool\CReferencePool.cs" />
+    <Compile Include="Code\Base\ReferencePool\CReferencePool.ReferenceCollection.cs" />
+    <Compile Include="Code\Base\ReferencePool\IReference.cs" />
+    <Compile Include="Code\Base\TaskPool\CTaskBase.cs" />
+    <Compile Include="Code\Base\TaskPool\CTaskPool.cs" />
+    <Compile Include="Code\Base\TaskPool\ITaskAgent.cs" />
+    <Compile Include="Code\Base\UtilityTools\CGameFrameworkEntry.cs" />
+    <Compile Include="Code\Base\UtilityTools\CGameFrameworkModule.cs" />
+    <Compile Include="Code\Base\UtilityTools\GameFrameworkException.cs" />
+    <Compile Include="Code\Base\UtilityTools\Text\CUtility.Text.cs" />
+    <Compile Include="Code\Base\UtilityTools\Text\CUtility.Text.ITextHelper.cs" />
+    <Compile Include="Code\Download\CDownloadEvent.cs" />
+    <Compile Include="Code\Download\CDownloadMgr.cs" />
+    <Compile Include="Code\Download\CDownloadMgr.DownloadAgent.cs" />
+    <Compile Include="Code\Download\CDownloadMgr.DownloadTask.cs" />
+    <Compile Include="Code\Download\IDownloadAgentHelper.cs" />
+    <Compile Include="Code\Download\IDownloadMgr.cs" />
+    <Compile Include="Code\ObjectPool\CObjectBase.cs" />
+    <Compile Include="Code\ObjectPool\CObjectPoolBase.cs" />
+    <Compile Include="Code\ObjectPool\CObjectPoolMgr.cs" />
+    <Compile Include="Code\ObjectPool\CObjectPoolMgr.Object.cs" />
+    <Compile Include="Code\ObjectPool\CObjectPoolMgr.ObjectPool.cs" />
+    <Compile Include="Code\ObjectPool\IObjectPool.cs" />
+    <Compile Include="Code\ObjectPool\IObjPoolMgr.cs" />
+    <Compile Include="Code\WebRequest\CWebRequestEvent.cs" />
+    <Compile Include="Code\WebRequest\CWebRequestMgr.cs" />
+    <Compile Include="Code\WebRequest\CWebRequestMgr.RequestAgent.cs" />
+    <Compile Include="Code\WebRequest\CWebRequestMgr.RequestTask.cs" />
+    <Compile Include="Code\WebRequest\IWebRequestAgentHelper.cs" />
+    <Compile Include="Code\WebRequest\IWebRequestMgr.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="WebRequest\CWebRequestEvent.cs" />
-    <Compile Include="WebRequest\CWebRequestMgr.RequestAgent.cs" />
-    <Compile Include="WebRequest\CWebRequestMgr.RequestTask.cs" />
-    <Compile Include="WebRequest\CWebRequestMgr.cs" />
-    <Compile Include="WebRequest\IWebRequestAgentHelper.cs" />
-    <Compile Include="WebRequest\IWebRequestMgr.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Code\FSM\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

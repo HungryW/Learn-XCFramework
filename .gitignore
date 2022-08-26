@@ -1,4 +1,4 @@
-.vs
-Library
-bin
-obj
+XCFrameworkBase/XCFrameworkBase/.vs
+XCFrameworkBase/XCFrameworkBase/XCFrameworkBase/bin
+XCFrameworkBase/XCFrameworkBase/XCFrameworkBase/obj
+XCFramework/Library
