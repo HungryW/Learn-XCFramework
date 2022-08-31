@@ -3,6 +3,10 @@ using System.Collections.Generic;
 
 namespace XCFrameworkBase
 {
+    /// <summary>
+    /// task 是任务数据 agent 是任务行为
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public sealed class CTaskPool<T> where T : CTaskBase
     {
         private readonly Stack<ITaskAgent<T>> m_stackFreeAgents;
