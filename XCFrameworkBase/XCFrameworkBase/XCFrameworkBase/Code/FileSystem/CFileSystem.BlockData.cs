@@ -30,6 +30,10 @@ namespace XCFrameworkBase
             public int ClusterIdx => m_nClusterIdx;
             public int Len => m_nLen;
 
+            public SBlockData Free()
+            {
+                return new SBlockData(m_nClusterIdx, (int)_GetUpBoundClusterOffset(m_nLen));
+            }
 
         }
     }

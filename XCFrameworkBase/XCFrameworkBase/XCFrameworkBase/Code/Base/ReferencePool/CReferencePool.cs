@@ -15,7 +15,7 @@ namespace XCFrameworkBase
     /// </summary>
     public static partial class CReferencePool
     {
-        private static readonly Dictionary<Type, CReferenceCollection> ms_mapPools;
+        private static readonly Dictionary<Type, CReferenceCollection> ms_mapPools = new Dictionary<Type, CReferenceCollection>();
 
         public static int Count
         {

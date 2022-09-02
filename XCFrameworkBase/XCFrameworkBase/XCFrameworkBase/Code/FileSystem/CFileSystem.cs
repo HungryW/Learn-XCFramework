@@ -37,6 +37,14 @@ namespace XCFrameworkBase
         private int m_nStringDataOffset;
         private int m_nFileDataOffset;
 
+        public string FullPath => m_szFullPath;
+
+        public EFileSystemAccess Access => m_eAccess;
+
+        public int FileCount => m_mapFileDatas.Count;
+
+        public int MaxFileCount => m_headerData.MaxFileCount;
+
         private CFileSystem(string a_szFullPath, EFileSystemAccess a_eAccesss, CFileSystemStream a_stream)
         {
             Debug.Assert(!string.IsNullOrEmpty(a_szFullPath));
@@ -237,8 +245,7 @@ namespace XCFrameworkBase
             }
             return 0;
         }
-
-        public int Readfile(string a_szName, Stream a_outStream)
+        public int ReadFile(string a_szName, Stream a_outStream)
         {
             Debug.Assert(m_eAccess == EFileSystemAccess.Read || m_eAccess == EFileSystemAccess.ReadWrite);
             Debug.Assert(!string.IsNullOrEmpty(a_szName));
@@ -255,7 +262,7 @@ namespace XCFrameworkBase
             return m_stream.Read(a_outStream, nLen);
         }
 
-        public byte[] ReadFileSegment(string a_szName, int a_nOffset, int a_nLen)
+        public byte[] ReadFileSegement(string a_szName, int a_nOffset, int a_nLen)
         {
             Debug.Assert(m_eAccess == EFileSystemAccess.Read || m_eAccess == EFileSystemAccess.ReadWrite);
             Debug.Assert(!string.IsNullOrEmpty(a_szName));
@@ -283,7 +290,7 @@ namespace XCFrameworkBase
             }
         }
 
-        public int ReadFileSegment(string a_szName, int a_nOffset, byte[] a_outBuffer, int a_nStartIdx, int a_nLen)
+        public int ReadFileSegement(string a_szName, byte[] a_outBuffer, int a_nStartIdx, int a_nOffset, int a_nLen)
         {
             Debug.Assert(m_eAccess == EFileSystemAccess.Read || m_eAccess == EFileSystemAccess.ReadWrite);
             Debug.Assert(!string.IsNullOrEmpty(a_szName));
@@ -308,7 +315,7 @@ namespace XCFrameworkBase
             return 0;
         }
 
-        public int ReadFileSegment(string a_szName, int a_nOffset, Stream a_outStream, int a_nLen)
+        public int ReadFileSegement(string a_szName, Stream a_outStream, int a_nOffset, int a_nLen)
         {
             Debug.Assert(m_eAccess == EFileSystemAccess.Read || m_eAccess == EFileSystemAccess.ReadWrite);
             Debug.Assert(!string.IsNullOrEmpty(a_szName));
@@ -368,8 +375,187 @@ namespace XCFrameworkBase
             m_stream.Flush();
             return true;
         }
+
+        public bool WriteFile(string a_szName, Stream a_stream)
+        {
+            Debug.Assert(m_eAccess == EFileSystemAccess.Write || m_eAccess == EFileSystemAccess.ReadWrite);
+            Debug.Assert(!string.IsNullOrEmpty(a_szName));
+            Debug.Assert(a_szName.Length <= byte.MaxValue);
+            Debug.Assert(a_stream != null);
+
+            int nOldBlockIdx = -1;
+            bool bHasFile = m_mapFileDatas.TryGetValue(a_szName, out nOldBlockIdx);
+            if (!bHasFile && m_mapFileDatas.Count >= m_headerData.MaxFileCount)
+            {
+                return false;
+            }
+
+            int nLen = (int)(a_stream.Length - a_stream.Position);
+            int nNewBlockIdx = _AllocBlock(nLen);
+            if (nNewBlockIdx < 0)
+            {
+                return false;
+            }
+
+            m_stream.Position = _GetClusterOffest(m_listBlockDatas[nNewBlockIdx].ClusterIdx);
+            m_stream.Write(a_stream, nLen);
+            _ProcessWriteFile(a_szName, bHasFile, nOldBlockIdx, nNewBlockIdx, nLen);
+            m_stream.Flush();
+            return true;
+        }
+
+        public bool WriteFile(string a_szName, string a_szFilePath)
+        {
+            Debug.Assert(!string.IsNullOrEmpty(a_szFilePath));
+            if (!File.Exists(a_szFilePath))
+            {
+                return false;
+            }
+
+            using (FileStream fileStream = new FileStream(a_szFilePath, FileMode.Open, FileAccess.Read, FileShare.Read))
+            {
+                return WriteFile(a_szName, fileStream);
+            }
+        }
+
+        public bool SaveAsFile(string a_szName, string a_szFilePath)
+        {
+            Debug.Assert(m_eAccess == EFileSystemAccess.Write || m_eAccess == EFileSystemAccess.ReadWrite);
+            Debug.Assert(!string.IsNullOrEmpty(a_szName));
+            Debug.Assert(!string.IsNullOrEmpty(a_szFilePath));
+
+            SFileInfo fileInfo = GetFileInfo(a_szName);
+            if (!fileInfo.IsValid())
+            {
+                return false;
+            }
+
+            if (File.Exists(a_szFilePath))
+            {
+                File.Delete(a_szFilePath);
+            }
+
+            string szDicPath = Path.GetDirectoryName(a_szFilePath);
+            if (!Directory.Exists(szDicPath))
+            {
+                Directory.CreateDirectory(szDicPath);
+            }
+
+            using (FileStream fileStream = new FileStream(a_szFilePath, FileMode.Create, FileAccess.Write, FileShare.Write))
+            {
+                int nLen = fileInfo.Len;
+                if (nLen > 0)
+                {
+                    m_stream.Position = fileInfo.Offset;
+                    return m_stream.Read(fileStream, nLen) == nLen;
+                }
+
+                return true;
+            }
+
+        }
+
+        public bool RenameFile(string a_szOldName, string a_szNewName)
+        {
+            Debug.Assert(m_eAccess == EFileSystemAccess.Write || m_eAccess == EFileSystemAccess.ReadWrite);
+            Debug.Assert(!string.IsNullOrEmpty(a_szOldName));
+            Debug.Assert(!string.IsNullOrEmpty(a_szNewName));
+
+            if (a_szNewName.Length > byte.MaxValue)
+            {
+                return false;
+            }
+
+            if (a_szNewName == a_szOldName)
+            {
+                return true;
+            }
+
+            if (m_mapFileDatas.ContainsKey(a_szNewName))
+            {
+                return false;
+            }
+
+            int nBlockIdx = -1;
+            if (!m_mapFileDatas.TryGetValue(a_szOldName, out nBlockIdx))
+            {
+                return false;
+            }
+
+            int nStingIdx = m_listBlockDatas[nBlockIdx].StringIdx;
+            SStringData stringData = m_mapStringData[nStingIdx].SetString(a_szNewName, m_headerData.GetEncryptBytes());
+            m_mapStringData[nStingIdx] = stringData;
+            _WriteStringData(nStingIdx, stringData);
+            m_mapFileDatas.Add(a_szNewName, nBlockIdx);
+            m_mapFileDatas.Remove(a_szOldName);
+            m_stream.Flush();
+            return true;
+        }
+
+        public bool DelFile(string a_szName)
+        {
+            Debug.Assert(m_eAccess == EFileSystemAccess.Write || m_eAccess == EFileSystemAccess.ReadWrite);
+            Debug.Assert(!string.IsNullOrEmpty(a_szName));
+
+            int nBlockIdx = 0;
+            if (!m_mapFileDatas.TryGetValue(a_szName, out nBlockIdx))
+            {
+                return false;
+            }
+
+            m_mapFileDatas.Remove(a_szName);
+
+            SBlockData blockData = m_listBlockDatas[nBlockIdx];
+            int nStringIdx = blockData.StringIdx;
+            SStringData stringData = m_mapStringData[nStringIdx].Clear();
+            m_listFreeStringIdxs.Enqueue(nStringIdx);
+            m_listFreeStringDatas.Enqueue(stringData);
+
+            blockData = blockData.Free();
+            m_listBlockDatas[nBlockIdx] = blockData;
+            if (!_TryCombineFreeBlocks(nBlockIdx))
+            {
+                m_mapFreeBlockIdxs.Add(blockData.Len, nBlockIdx);
+                _WriteBlockData(nBlockIdx);
+            }
+            m_stream.Flush();
+            return true;
+        }
+
         private void _ProcessWriteFile(string a_szName, bool a_bHasFile, int a_nOldBlockIdx, int a_nNewBlockIdx, int a_nLen)
         {
+            SBlockData blockData = m_listBlockDatas[a_nNewBlockIdx];
+            if (a_bHasFile)
+            {
+                SBlockData oldBlockData = m_listBlockDatas[a_nOldBlockIdx];
+                blockData = new SBlockData(oldBlockData.StringIdx, oldBlockData.ClusterIdx, a_nLen);
+                m_listBlockDatas[a_nNewBlockIdx] = blockData;
+                _WriteBlockData(a_nNewBlockIdx);
+
+                oldBlockData = oldBlockData.Free();
+                m_listBlockDatas[a_nOldBlockIdx] = oldBlockData;
+                if (!_TryCombineFreeBlocks(a_nOldBlockIdx))
+                {
+                    m_mapFreeBlockIdxs.Add(oldBlockData.Len, a_nOldBlockIdx);
+                    _WriteBlockData(a_nOldBlockIdx);
+                }
+            }
+            else
+            {
+                int nStringIdx = _AllocString(a_szName);
+                blockData = new SBlockData(nStringIdx, blockData.ClusterIdx, a_nLen);
+                m_listBlockDatas[a_nNewBlockIdx] = blockData;
+                _WriteBlockData(a_nNewBlockIdx);
+            }
+
+            if (a_bHasFile)
+            {
+                m_mapFileDatas[a_szName] = a_nNewBlockIdx;
+            }
+            else
+            {
+                m_mapFileDatas.Add(a_szName, a_nNewBlockIdx);
+            }
         }
 
         private int _AllocBlock(int a_nLen)
@@ -569,6 +755,5 @@ namespace XCFrameworkBase
             m_stream.Position = m_nStringDataOffset + mc_nStringDataSize * a_nStringIdx;
             m_stream.Write(ms_arrCachedBytes, 0, mc_nStringDataSize);
         }
-
     }
 }

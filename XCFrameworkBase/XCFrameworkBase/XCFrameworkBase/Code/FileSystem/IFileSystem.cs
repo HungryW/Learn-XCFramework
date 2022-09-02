@@ -53,7 +53,7 @@ namespace XCFrameworkBase
         int ReadFile(string a_szName, byte[] a_outArrBuffer, int a_nStartIdx, int a_nLen);
         int ReadFile(string a_szName, Stream a_outStream);
 
-        int ReadFileSegement(string a_szName, byte[] a_outArrBuffer, int a_nOffset, int a_nLen);
+        int ReadFileSegement(string a_szName, byte[] a_outArrBuffer, int a_nStartIdx, int a_nOffset, int a_nLen);
         int ReadFileSegement(string a_szName, Stream a_outStream, int a_nOffset, int a_nLen);
 
         bool WriteFile(string a_szName, byte[] a_arrBuffer, int a_nStartIdx, int a_nLen);

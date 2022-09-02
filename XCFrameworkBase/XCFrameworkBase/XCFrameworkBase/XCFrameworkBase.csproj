@@ -21,6 +21,8 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -63,6 +65,7 @@
     <Compile Include="Code\Base\UtilityTools\Utility.Converter.cs" />
     <Compile Include="Code\Base\UtilityTools\Utility.Encryption.cs" />
     <Compile Include="Code\Base\UtilityTools\Utility.Marshal.cs" />
+    <Compile Include="Code\Base\UtilityTools\Utility.Path.cs" />
     <Compile Include="Code\Base\UtilityTools\Utility.Random.cs" />
     <Compile Include="Code\Base\UtilityTools\Variable\CGenericVariable.cs" />
     <Compile Include="Code\Base\UtilityTools\Variable\CVariable.cs" />
@@ -78,7 +81,10 @@
     <Compile Include="Code\FileSystem\CFileSystem.cs" />
     <Compile Include="Code\FileSystem\CFileSystemCommonStream.cs" />
     <Compile Include="Code\FileSystem\CFileSystemStream.cs" />
+    <Compile Include="Code\FileSystem\FileSystemMgr.cs" />
     <Compile Include="Code\FileSystem\IFileSystem.cs" />
+    <Compile Include="Code\FileSystem\IFileSystemMgr.cs" />
+    <Compile Include="Code\FileSystem\IFileSystmeHelper.cs" />
     <Compile Include="Code\FileSystem\SFileInfo.cs" />
     <Compile Include="Code\FSM\CFsm.cs" />
     <Compile Include="Code\FSM\CFsmBase.cs" />
