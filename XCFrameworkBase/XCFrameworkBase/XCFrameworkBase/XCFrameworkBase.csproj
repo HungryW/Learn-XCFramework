@@ -54,6 +54,7 @@
     <Compile Include="Code\Base\TaskPool\CTaskBase.cs" />
     <Compile Include="Code\Base\TaskPool\CTaskPool.cs" />
     <Compile Include="Code\Base\TaskPool\ITaskAgent.cs" />
+    <Compile Include="Code\Base\UtilityTools\CFrameworkSerializer.cs" />
     <Compile Include="Code\Base\UtilityTools\CGameFrameworkEntry.cs" />
     <Compile Include="Code\Base\UtilityTools\CGameFrameworkModule.cs" />
     <Compile Include="Code\Base\UtilityTools\Collection\GameFrameworkLinkedList.cs" />
@@ -102,6 +103,19 @@
     <Compile Include="Code\Procedure\CProcedureBase.cs" />
     <Compile Include="Code\Procedure\CProcedureMgr.cs" />
     <Compile Include="Code\Procedure\IProcedureMgr.cs" />
+    <Compile Include="Code\Resource\CResourceMgr.ResourceInfo.cs" />
+    <Compile Include="Code\Resource\CResourceMgr.ResourceLoader.LoadResourceAgent.cs" />
+    <Compile Include="Code\Resource\CResourceMgr.ResourceLoader.LoadResourceTaskBase.cs" />
+    <Compile Include="Code\Resource\CResourceMgr.ResourceName.cs" />
+    <Compile Include="Code\Resource\CResourceMgr.ResourceLoader.ResourceObj.cs" />
+    <Compile Include="Code\Resource\CResourceMgr.ResourceLoader.AssetObject.cs" />
+    <Compile Include="Code\Resource\CResourceMgr.ResourceLoader.cs" />
+    <Compile Include="Code\Resource\CResourceMgr.cs" />
+    <Compile Include="Code\Resource\ILoadResourceAgentHelper.cs" />
+    <Compile Include="Code\Resource\IResourceGroup.cs" />
+    <Compile Include="Code\Resource\IResourceGroupCollection.cs" />
+    <Compile Include="Code\Resource\IResourceHelper.cs" />
+    <Compile Include="Code\Resource\IResourceMgr.cs" />
     <Compile Include="Code\WebRequest\CWebRequestEvent.cs" />
     <Compile Include="Code\WebRequest\CWebRequestMgr.cs" />
     <Compile Include="Code\WebRequest\CWebRequestMgr.RequestAgent.cs" />

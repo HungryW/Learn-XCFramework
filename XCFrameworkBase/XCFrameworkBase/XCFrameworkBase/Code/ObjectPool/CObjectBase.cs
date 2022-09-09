@@ -19,6 +19,11 @@ namespace XCFrameworkBase
             m_lastUseTime = default(DateTime);
         }
 
+        protected void Init(string a_szName, object a_oTarget)
+        {
+            Init(a_szName, a_oTarget, false, 0);
+        }
+
 
         protected void Init(string a_szName, object a_oTarget, bool a_bLocked, int a_nPriority)
         {
