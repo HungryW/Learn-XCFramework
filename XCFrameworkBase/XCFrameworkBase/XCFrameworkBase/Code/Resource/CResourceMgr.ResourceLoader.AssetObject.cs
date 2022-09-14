@@ -81,7 +81,7 @@ namespace XCFrameworkBase
                     }
 
                     m_refResourceLoader.m_mapAssetDependencyCount.Remove(Target);
-                    m_refResourceLoader.m_mapAssetToRessouce.Remove(Target);
+                    m_refResourceLoader.m_mapAssetToResource.Remove(Target);
                     m_refResourceHelper.Release(Target);
                 }
 

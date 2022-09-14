@@ -50,9 +50,11 @@ namespace XCFrameworkBase
 
         bool HasFile(string a_szName);
 
+        byte[] ReadFile(string a_szName);
         int ReadFile(string a_szName, byte[] a_outArrBuffer, int a_nStartIdx, int a_nLen);
         int ReadFile(string a_szName, Stream a_outStream);
 
+        byte[] ReadFileSegement(string a_szName, int a_nOffset, int a_nLen);
         int ReadFileSegement(string a_szName, byte[] a_outArrBuffer, int a_nStartIdx, int a_nOffset, int a_nLen);
         int ReadFileSegement(string a_szName, Stream a_outStream, int a_nOffset, int a_nLen);
 

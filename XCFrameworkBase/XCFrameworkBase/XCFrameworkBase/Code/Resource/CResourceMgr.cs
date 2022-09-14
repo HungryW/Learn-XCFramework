@@ -5,6 +5,41 @@ namespace XCFrameworkBase
 {
     public sealed partial class CResourceMgr : CGameFrameworkModule, IResourceMgr
     {
+        private const string DefaultExtension = "dat";
+
+        private string m_szReadOnlyPath;
+        private string m_szReadWritePath;
+
+        private EResourceMode m_eResourceMode;
+
+        private IResourceHelper m_ResourceHelper;
+
+        private DecrptResourceCallback m_fnDecryptResource;
+
+        public CResourceMgr()
+        {
+            m_szReadOnlyPath = null;
+            m_szReadWritePath = null;
+            m_eResourceMode = EResourceMode.Updatable;
+            m_fnDecryptResource = null;
+            m_ResourceHelper = null;
+        }
+
+        private void _UpdateResource(SResourceName a_ResourceName)
+        {
+
+        }
+
+        private CAssetInfo _GetAssetInfo(string a_szAssetName)
+        {
+            return null;
+        }
+
+        private CResourceInfo _GetResourceInfo(SResourceName a_szResourceName)
+        {
+            return null;
+        }
+
         public override int Priority => base.Priority;
 
         public override bool Equals(object obj)

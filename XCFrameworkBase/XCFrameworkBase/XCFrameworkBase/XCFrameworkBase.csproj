@@ -103,8 +103,17 @@
     <Compile Include="Code\Procedure\CProcedureBase.cs" />
     <Compile Include="Code\Procedure\CProcedureMgr.cs" />
     <Compile Include="Code\Procedure\IProcedureMgr.cs" />
+    <Compile Include="Code\Resource\CLoadBinaryCallbacks.cs" />
+    <Compile Include="Code\Resource\CLoadSceneCallbacks.cs" />
+    <Compile Include="Code\Resource\CLoadAssetCallbacks.cs" />
+    <Compile Include="Code\Resource\CResourceMgr.ResourceLoader.LoadBinaryInfo.cs" />
+    <Compile Include="Code\Resource\CResourceMgr.Enum.cs" />
+    <Compile Include="Code\Resource\CResourceMgr.AssetInfo.cs" />
     <Compile Include="Code\Resource\CResourceMgr.ResourceInfo.cs" />
+    <Compile Include="Code\Resource\CResourceMgr.ResourceLoader.LoadSceneTask.cs" />
+    <Compile Include="Code\Resource\CResourceMgr.ResourceLoader.LoadDependencyAssetTask.cs" />
     <Compile Include="Code\Resource\CResourceMgr.ResourceLoader.LoadResourceAgent.cs" />
+    <Compile Include="Code\Resource\CResourceMgr.ResourceLoader.LoadAssetTask.cs" />
     <Compile Include="Code\Resource\CResourceMgr.ResourceLoader.LoadResourceTaskBase.cs" />
     <Compile Include="Code\Resource\CResourceMgr.ResourceName.cs" />
     <Compile Include="Code\Resource\CResourceMgr.ResourceLoader.ResourceObj.cs" />

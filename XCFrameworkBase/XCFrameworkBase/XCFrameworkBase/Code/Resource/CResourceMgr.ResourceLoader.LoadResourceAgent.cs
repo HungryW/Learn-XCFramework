@@ -12,7 +12,7 @@ namespace XCFrameworkBase
 
         private sealed partial class CResourceLoader
         {
-            private abstract class CLoadResourceAgent : ITaskAgent<CLoadResourceTaskBase>
+            private class CLoadResourceAgent : ITaskAgent<CLoadResourceTaskBase>
             {
 
                 private static readonly HashSet<string> ms_setLoadingAssetNames = new HashSet<string>(StringComparer.Ordinal);
@@ -261,11 +261,11 @@ namespace XCFrameworkBase
                         List<object> listDependcyAssets = m_refTask.GetDependencyAssets();
                         assetObj = CAssetObject.Create(m_refTask.AssetName, arg.Asset, listDependcyAssets, m_refTask.ResourceObject.Target, m_refResourceHelper, m_refResourceLoader);
                         m_refResourceLoader.m_AssetPool.Register(assetObj, true);
-                        m_refResourceLoader.m_mapAssetToRessouce.Add(arg.Asset, m_refTask.ResourceObject.Target);
+                        m_refResourceLoader.m_mapAssetToResource.Add(arg.Asset, m_refTask.ResourceObject.Target);
                         foreach (object dependencyAsset in listDependcyAssets)
                         {
                             object dependencyRes = null;
-                            if (m_refResourceLoader.m_mapAssetToRessouce.TryGetValue(dependencyAsset, out dependencyRes))
+                            if (m_refResourceLoader.m_mapAssetToResource.TryGetValue(dependencyAsset, out dependencyRes))
                             {
                                 m_refTask.ResourceObject.AddDependencyRes(dependencyRes);
                             }
