@@ -5,7 +5,14 @@ namespace XCFrameworkBase
 {
     public sealed partial class CResourceMgr : CGameFrameworkModule, IResourceMgr
     {
+        private const string RemoteVersionListFileName = "GameFrameworkVersion.dat";
         private const string DefaultExtension = "dat";
+
+        private Dictionary<string, CAssetInfo> m_mapAssetInfo;
+        private Dictionary<SResourceName, CResourceInfo> m_mapResourceInfo;
+
+        private string m_szApplicationGameVersion;
+        private int m_nInternalResourceVersion;
 
         private string m_szReadOnlyPath;
         private string m_szReadWritePath;
@@ -16,6 +23,8 @@ namespace XCFrameworkBase
 
         private DecrptResourceCallback m_fnDecryptResource;
 
+        private CPackageVersionListSerialize m_PackageVersionSerialize;
+
         public CResourceMgr()
         {
             m_szReadOnlyPath = null;
@@ -23,6 +32,11 @@ namespace XCFrameworkBase
             m_eResourceMode = EResourceMode.Updatable;
             m_fnDecryptResource = null;
             m_ResourceHelper = null;
+        }
+
+        private CResourceGroup _GetOrAddResourceGroup(string a_szResourceGroupName)
+        {
+            return null;
         }
 
         private void _UpdateResource(SResourceName a_ResourceName)

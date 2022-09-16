@@ -106,6 +106,8 @@
     <Compile Include="Code\Resource\CLoadBinaryCallbacks.cs" />
     <Compile Include="Code\Resource\CLoadSceneCallbacks.cs" />
     <Compile Include="Code\Resource\CLoadAssetCallbacks.cs" />
+    <Compile Include="Code\Resource\CPackageVersionListSerialize.cs" />
+    <Compile Include="Code\Resource\CResourceMgr.CReourceIniter.cs" />
     <Compile Include="Code\Resource\CResourceMgr.ResourceLoader.LoadBinaryInfo.cs" />
     <Compile Include="Code\Resource\CResourceMgr.Enum.cs" />
     <Compile Include="Code\Resource\CResourceMgr.AssetInfo.cs" />
@@ -125,6 +127,11 @@
     <Compile Include="Code\Resource\IResourceGroupCollection.cs" />
     <Compile Include="Code\Resource\IResourceHelper.cs" />
     <Compile Include="Code\Resource\IResourceMgr.cs" />
+    <Compile Include="Code\Resource\SPackageVersionList.ResourceGroup.cs" />
+    <Compile Include="Code\Resource\SPackageVersionList.FileSystem.cs" />
+    <Compile Include="Code\Resource\SPackageVersionList.Resource.cs" />
+    <Compile Include="Code\Resource\SPackageVersionList.Asset.cs" />
+    <Compile Include="Code\Resource\SPackageVersionList.cs" />
     <Compile Include="Code\WebRequest\CWebRequestEvent.cs" />
     <Compile Include="Code\WebRequest\CWebRequestMgr.cs" />
     <Compile Include="Code\WebRequest\CWebRequestMgr.RequestAgent.cs" />

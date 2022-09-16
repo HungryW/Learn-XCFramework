@@ -20,8 +20,6 @@ namespace XCFrameworkBase
 
         float Progress { get; }
 
-        string[] GetResourceNames();
-
         void GetResourceNames(List<string> results);
     }
 }
