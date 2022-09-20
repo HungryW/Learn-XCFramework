@@ -3,6 +3,14 @@ using System.IO;
 
 namespace XCFrameworkBase
 {
+    /// <summary>
+    /// 序列化和反序列化的基类
+    /// 包含了公用的头部数据 头标识字节 和 版本号
+    /// 提供了校验头标识 和 管理不同版本序列化和反序列化回调
+    /// 序列化接口 参数是 数据结构实例,要写入的二进制流,版本号   将数据结构转化为二进制流
+    /// 反序列化接口 参数是 要读取的二进制流, 返回数据结构实例, 流中有版本信息
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public abstract class CFrameworkSerializer<T>
     {
         public delegate bool SerializeCallback(Stream stream, T data);

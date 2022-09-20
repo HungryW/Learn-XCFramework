@@ -31,7 +31,7 @@ namespace XCFrameworkBase
             public void InitResource(string a_szCurrentVariant)
             {
                 m_szCurVarint = a_szCurrentVariant;
-                string szFileUri = CUtility.Path.GetRemotePath(Path.Combine(m_refResMgr.m_szReadOnlyPath, RemoteVersionListFileName));
+                string szFileUri = CUtility.Path.GetRemotePath(Path.Combine(m_refResMgr.m_szReadOnlyPath, ms_szRemoteVersionListFileName));
                 CLoadBytesCallbacks callback = new CLoadBytesCallbacks(_OnLoadPackageVersionSuccess, _OnLoadPackageVersionFial);
                 m_refResMgr.m_ResourceHelper.LoadBytes(szFileUri, callback, null);
             }
@@ -47,10 +47,10 @@ namespace XCFrameworkBase
                     {
                         return;
                     }
-                    SPackageVersionList.SAsset[] arrAsset = versionList.GetAssets();
-                    SPackageVersionList.SResource[] arrResource = versionList.GetResources();
-                    SPackageVersionList.SFileSystem[] arrFileSystems = versionList.GetFileSystems();
-                    SPackageVersionList.SResourceGroup[] arrResourceGroups = versionList.GetResourceGroups();
+                    SVersionList.SAsset[] arrAsset = versionList.GetAssets();
+                    SVersionList.SResource[] arrResource = versionList.GetResources();
+                    SVersionList.SFileSystem[] arrFileSystems = versionList.GetFileSystems();
+                    SVersionList.SResourceGroup[] arrResourceGroups = versionList.GetResourceGroups();
 
                     m_refResMgr.m_nInternalResourceVersion = versionList.InternalResourceVersion;
                     m_refResMgr.m_szApplicationGameVersion = versionList.ApplicableGameVersion;
@@ -64,7 +64,7 @@ namespace XCFrameworkBase
                         int[] arrResIdx = fileSys.GetResourceIdxes();
                         foreach (int nResIdx in arrResIdx)
                         {
-                            SPackageVersionList.SResource resource = arrResource[nResIdx];
+                            SVersionList.SResource resource = arrResource[nResIdx];
                             if (resource.Variant != null && resource.Variant != m_szCurVarint)
                             {
                                 continue;
@@ -85,12 +85,12 @@ namespace XCFrameworkBase
                         int[] arrAssetIdxs = res.GetAssetIdxes();
                         foreach (int nIdx in arrAssetIdxs)
                         {
-                            SPackageVersionList.SAsset asset = arrAsset[nIdx];
+                            SVersionList.SAsset asset = arrAsset[nIdx];
                             int[] arrDependAssetIdx = asset.GetDependAssetIdxes();
                             string[] arrDependAssetName = new string[arrDependAssetIdx.Length];
                             for (int i = 0; i < arrDependAssetIdx.Length; i++)
                             {
-                                SPackageVersionList.SAsset dependAsset = arrAsset[nIdx];
+                                SVersionList.SAsset dependAsset = arrAsset[nIdx];
                                 arrDependAssetName[i] = dependAsset.Name;
                             }
 
@@ -112,7 +112,7 @@ namespace XCFrameworkBase
                         int[] arrRerIdxs = resGroupinfo.GetResourceIdxes();
                         foreach (int nIdx in arrRerIdxs)
                         {
-                            SPackageVersionList.SResource resource = arrResource[nIdx];
+                            SVersionList.SResource resource = arrResource[nIdx];
                             if (resource.Variant != null && resource.Variant != m_szCurVarint)
                             {
                                 continue;

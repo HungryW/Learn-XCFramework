@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using static XCFrameworkBase.SVersionList;
 
 namespace XCFrameworkBase
 {
@@ -55,10 +57,42 @@ namespace XCFrameworkBase
     {
         public static class CVersionListSerializer
         {
-            private const int CachedHashBytesLength = 4;
-            private static readonly byte[] ms_arrCachedHashBytes = new byte[CachedHashBytesLength];
+            private const string DefaultExtension = "dat";
+            private const int ms_nCachedHashBytesLength = 4;
+            private static readonly byte[] ms_arrCachedHashBytes = new byte[ms_nCachedHashBytesLength];
 
+            private static int _AssetNameToDependencyAssetNamesComparer(KeyValuePair<string, string[]> a, KeyValuePair<string, string[]> b)
+            {
+                return a.Key.CompareTo(b.Key);
+            }
 
+            private static int _GetAssetNameIndex(List<KeyValuePair<string, string[]>> assetNameToDependencyAssetNames, string assetName)
+            {
+                return GetAssetNameIndexWithBinarySearch(assetNameToDependencyAssetNames, assetName, 0, assetNameToDependencyAssetNames.Count - 1);
+            }
+
+            private static int GetAssetNameIndexWithBinarySearch(List<KeyValuePair<string, string[]>> assetNameToDependencyAssetNames, string assetName, int leftIndex, int rightIndex)
+            {
+                if (leftIndex > rightIndex)
+                {
+                    return -1;
+                }
+
+                int middleIndex = (leftIndex + rightIndex) / 2;
+                if (assetNameToDependencyAssetNames[middleIndex].Key == assetName)
+                {
+                    return middleIndex;
+                }
+
+                if (assetNameToDependencyAssetNames[middleIndex].Key.CompareTo(assetName) > 0)
+                {
+                    return GetAssetNameIndexWithBinarySearch(assetNameToDependencyAssetNames, assetName, leftIndex, middleIndex - 1);
+                }
+                else
+                {
+                    return GetAssetNameIndexWithBinarySearch(assetNameToDependencyAssetNames, assetName, middleIndex + 1, rightIndex);
+                }
+            }
 
             public static bool PackageVersionListSerializeCallback_V0(Stream stream, SPackageVersionList versionList)
             {
@@ -74,8 +108,8 @@ namespace XCFrameworkBase
                     binaryWriter.WriteEncryptedString(versionList.ApplicableGameVersion, ms_arrCachedHashBytes);
 
                     binaryWriter.Write(versionList.InternalResourceVersion);
-                    SPackageVersionList.SAsset[] arrAsset = versionList.GetAssets();
-                    SPackageVersionList.SResource[] arrResource = versionList.GetResources();
+                    SVersionList.SAsset[] arrAsset = versionList.GetAssets();
+                    SVersionList.SResource[] arrResource = versionList.GetResources();
                     binaryWriter.Write(arrAsset.Length);
                     binaryWriter.Write(arrResource.Length);
 
@@ -88,11 +122,11 @@ namespace XCFrameworkBase
                         binaryWriter.Write(res.HashCode);
                         int[] arrAssetIdxs = res.GetAssetIdxes();
                         binaryWriter.Write(arrAssetIdxs.Length);
-                        byte[] hashBytes = new byte[CachedHashBytesLength];
+                        byte[] hashBytes = new byte[ms_nCachedHashBytesLength];
                         CUtility.Converter.GetBytes(res.HashCode, hashBytes);
                         foreach (int nAssetIdx in arrAssetIdxs)
                         {
-                            SPackageVersionList.SAsset assetInfo = arrAsset[nAssetIdx];
+                            SVersionList.SAsset assetInfo = arrAsset[nAssetIdx];
                             binaryWriter.WriteEncryptedString(assetInfo.Name, hashBytes);
                             int[] arrDependAssetIdxs = assetInfo.GetDependAssetIdxes();
                             binaryWriter.Write(arrDependAssetIdxs.Length);
@@ -103,7 +137,7 @@ namespace XCFrameworkBase
                         }
                     }
 
-                    SPackageVersionList.SResourceGroup[] arrResGroup = versionList.GetResourceGroups();
+                    SVersionList.SResourceGroup[] arrResGroup = versionList.GetResourceGroups();
                     binaryWriter.Write(arrResGroup.Length);
                     foreach (var resGroup in arrResGroup)
                     {
@@ -116,103 +150,91 @@ namespace XCFrameworkBase
                         }
                     }
                 }
-                Array.Clear(ms_arrCachedHashBytes, 0, CachedHashBytesLength);
+                Array.Clear(ms_arrCachedHashBytes, 0, ms_nCachedHashBytesLength);
                 return true;
             }
-
 
             public static SPackageVersionList PackageVersionListDeserializeCallback_V0(Stream stream)
             {
                 using (BinaryReader binaryReader = new BinaryReader(stream, Encoding.UTF8))
                 {
-                    byte[] arrEncryBytes = binaryReader.ReadBytes(CachedHashBytesLength);
-                    s
-                }
-                using (BinaryReader binaryReader = new BinaryReader(stream, Encoding.UTF8))
-                {
-                    byte[] encryptBytes = binaryReader.ReadBytes(CachedHashBytesLength);
-                    string applicableGameVersion = binaryReader.ReadEncryptedString(encryptBytes);
-                    int internalResourceVersion = binaryReader.ReadInt32();
-                    int assetCount = binaryReader.ReadInt32();
-                    PackageVersionList.Asset[] assets = assetCount > 0 ? new PackageVersionList.Asset[assetCount] : null;
-                    int resourceCount = binaryReader.ReadInt32();
-                    PackageVersionList.Resource[] resources = resourceCount > 0 ? new PackageVersionList.Resource[resourceCount] : null;
-                    string[][] resourceToAssetNames = new string[resourceCount][];
-                    List<KeyValuePair<string, string[]>> assetNameToDependencyAssetNames = new List<KeyValuePair<string, string[]>>(assetCount);
-                    for (int i = 0; i < resourceCount; i++)
+                    byte[] arrEncryBytes = binaryReader.ReadBytes(ms_nCachedHashBytesLength);
+                    string szAppGameVersion = binaryReader.ReadEncryptedString(arrEncryBytes);
+                    int nInternalResVersion = binaryReader.ReadInt32();
+                    int nAssetCount = binaryReader.ReadInt32();
+                    SVersionList.SAsset[] arrAsset = nAssetCount > 0 ? new SVersionList.SAsset[nAssetCount] : null;
+                    int nResCount = binaryReader.ReadInt32();
+                    SVersionList.SResource[] arrRes = nResCount > 0 ? new SVersionList.SResource[nResCount] : null;
+                    string[][] arrResToAssetNames = new string[nResCount][];
+                    List<KeyValuePair<string, string[]>> listAssetNameToDependNames = new List<KeyValuePair<string, string[]>>(nAssetCount);
+                    for (int i = 0; i < nResCount; i++)
                     {
-                        string name = binaryReader.ReadEncryptedString(encryptBytes);
-                        string variant = binaryReader.ReadEncryptedString(encryptBytes);
-                        byte loadType = binaryReader.ReadByte();
-                        int length = binaryReader.ReadInt32();
-                        int hashCode = binaryReader.ReadInt32();
-                        Utility.Converter.GetBytes(hashCode, s_CachedHashBytes);
+                        string szName = binaryReader.ReadEncryptedString(arrEncryBytes);
+                        string szVariant = binaryReader.ReadEncryptedString(arrEncryBytes);
+                        byte eLoadType = binaryReader.ReadByte();
+                        int nLen = binaryReader.ReadInt32();
+                        int nHashCode = binaryReader.ReadInt32();
+                        CUtility.Converter.GetBytes(nHashCode, ms_arrCachedHashBytes);
 
-                        int assetNameCount = binaryReader.ReadInt32();
-                        string[] assetNames = new string[assetNameCount];
-                        for (int j = 0; j < assetNameCount; j++)
+                        int nResContainAssetCount = binaryReader.ReadInt32();
+                        string[] arrAssetNames = new string[nResContainAssetCount];
+                        for (int j = 0; j < nResContainAssetCount; j++)
                         {
-                            assetNames[j] = binaryReader.ReadEncryptedString(s_CachedHashBytes);
-                            int dependencyAssetNameCount = binaryReader.ReadInt32();
-                            string[] dependencyAssetNames = dependencyAssetNameCount > 0 ? new string[dependencyAssetNameCount] : null;
-                            for (int k = 0; k < dependencyAssetNameCount; k++)
+                            arrAssetNames[j] = binaryReader.ReadEncryptedString(ms_arrCachedHashBytes);
+                            int nDependAssetNameCount = binaryReader.ReadInt32();
+                            string[] arrDependAssetName = nDependAssetNameCount > 0 ? new string[nDependAssetNameCount] : null;
+                            for (int k = 0; k < nDependAssetNameCount; k++)
                             {
-                                dependencyAssetNames[k] = binaryReader.ReadEncryptedString(s_CachedHashBytes);
+                                arrDependAssetName[k] = binaryReader.ReadEncryptedString(ms_arrCachedHashBytes);
                             }
-
-                            assetNameToDependencyAssetNames.Add(new KeyValuePair<string, string[]>(assetNames[j], dependencyAssetNames));
+                            listAssetNameToDependNames.Add(new KeyValuePair<string, string[]>(arrAssetNames[j], arrDependAssetName));
                         }
-
-                        resourceToAssetNames[i] = assetNames;
-                        resources[i] = new PackageVersionList.Resource(name, variant, null, loadType, length, hashCode, assetNameCount > 0 ? new int[assetNameCount] : null);
+                        arrResToAssetNames[i] = arrAssetNames;
+                        arrRes[i] = new SVersionList.SResource(szName, szVariant, null, eLoadType, nLen, nHashCode, nLen, nHashCode, nResContainAssetCount > 0 ? new int[nResContainAssetCount] : null);
                     }
-
-                    assetNameToDependencyAssetNames.Sort(AssetNameToDependencyAssetNamesComparer);
-                    Array.Clear(s_CachedHashBytes, 0, CachedHashBytesLength);
-                    int index = 0;
-                    foreach (KeyValuePair<string, string[]> i in assetNameToDependencyAssetNames)
+                    listAssetNameToDependNames.Sort((a, b) => { return a.Key.CompareTo(b.Key); });
+                    Array.Clear(ms_arrCachedHashBytes, 0, ms_nCachedHashBytesLength);
+                    int nIdx = 0;
+                    foreach (var val in listAssetNameToDependNames)
                     {
-                        if (i.Value != null)
+                        if (val.Value != null)
                         {
-                            int[] dependencyAssetIndexes = new int[i.Value.Length];
-                            for (int j = 0; j < i.Value.Length; j++)
+                            int[] arrDependAssetIdx = new int[val.Value.Length];
+                            for (int i = 0; i < val.Value.Length; i++)
                             {
-                                dependencyAssetIndexes[j] = GetAssetNameIndex(assetNameToDependencyAssetNames, i.Value[j]);
+                                arrDependAssetIdx[i] = _GetAssetNameIndex(listAssetNameToDependNames, val.Value[i]);
                             }
-
-                            assets[index++] = new PackageVersionList.Asset(i.Key, dependencyAssetIndexes);
+                            arrAsset[nIdx++] = new SVersionList.SAsset(val.Key, arrDependAssetIdx);
                         }
                         else
                         {
-                            assets[index++] = new PackageVersionList.Asset(i.Key, null);
+                            arrAsset[nIdx++] = new SVersionList.SAsset(val.Key, null);
                         }
                     }
 
-                    for (int i = 0; i < resources.Length; i++)
+                    for (int i = 0; i < arrRes.Length; i++)
                     {
-                        int[] assetIndexes = resources[i].GetAssetIndexes();
-                        for (int j = 0; j < assetIndexes.Length; j++)
+                        int[] arrAssetIdxes = arrRes[i].GetAssetIdxes();
+                        for (int j = 0; j < arrAssetIdxes.Length; j++)
                         {
-                            assetIndexes[j] = GetAssetNameIndex(assetNameToDependencyAssetNames, resourceToAssetNames[i][j]);
+                            arrAssetIdxes[j] = _GetAssetNameIndex(listAssetNameToDependNames, arrResToAssetNames[i][j]);
                         }
                     }
-
-                    int resourceGroupCount = binaryReader.ReadInt32();
-                    PackageVersionList.ResourceGroup[] resourceGroups = resourceGroupCount > 0 ? new PackageVersionList.ResourceGroup[resourceGroupCount] : null;
-                    for (int i = 0; i < resourceGroupCount; i++)
+                    int nResourceGroupCount = binaryReader.ReadInt32();
+                    SVersionList.SResourceGroup[] arrResourceGroups = nResourceGroupCount > 0 ? new SVersionList.SResourceGroup[nResourceGroupCount] : null;
+                    for (int i = 0; i < nResourceGroupCount; i++)
                     {
-                        string name = binaryReader.ReadEncryptedString(encryptBytes);
-                        int resourceIndexCount = binaryReader.ReadInt32();
-                        int[] resourceIndexes = resourceIndexCount > 0 ? new int[resourceIndexCount] : null;
-                        for (int j = 0; j < resourceIndexCount; j++)
+                        string szName = binaryReader.ReadEncryptedString(arrEncryBytes);
+                        int nGroupContainResCount = binaryReader.ReadInt32();
+                        int[] arrResIndx = nGroupContainResCount > 0 ? new int[nGroupContainResCount] : null;
+                        for (int j = 0; j < nGroupContainResCount; j++)
                         {
-                            resourceIndexes[j] = binaryReader.ReadUInt16();
+                            arrResIndx[j] = binaryReader.ReadUInt16();
                         }
 
-                        resourceGroups[i] = new PackageVersionList.ResourceGroup(name, resourceIndexes);
+                        arrResourceGroups[i] = new SVersionList.SResourceGroup(szName, arrResIndx);
                     }
-
-                    return new PackageVersionList(applicableGameVersion, internalResourceVersion, assets, resources, null, resourceGroups);
+                    return new SPackageVersionList(szAppGameVersion, nInternalResVersion, arrAsset, arrRes, null, arrResourceGroups);
                 }
             }
 

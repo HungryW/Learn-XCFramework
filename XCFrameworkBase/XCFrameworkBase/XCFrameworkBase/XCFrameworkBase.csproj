@@ -60,6 +60,8 @@
     <Compile Include="Code\Base\UtilityTools\Collection\GameFrameworkLinkedList.cs" />
     <Compile Include="Code\Base\UtilityTools\Collection\GameFrameworkLinkedListRange.cs" />
     <Compile Include="Code\Base\UtilityTools\Collection\GameFrameworkMultiDictionary.cs" />
+    <Compile Include="Code\Base\UtilityTools\Compress\CUtility.Compression.ICompressionHelper.cs" />
+    <Compile Include="Code\Base\UtilityTools\Compress\CUtility.Compression.cs" />
     <Compile Include="Code\Base\UtilityTools\GameFrameworkException.cs" />
     <Compile Include="Code\Base\UtilityTools\Text\CUtility.Text.cs" />
     <Compile Include="Code\Base\UtilityTools\Text\CUtility.Text.ITextHelper.cs" />
@@ -68,6 +70,8 @@
     <Compile Include="Code\Base\UtilityTools\Utility.Marshal.cs" />
     <Compile Include="Code\Base\UtilityTools\Utility.Path.cs" />
     <Compile Include="Code\Base\UtilityTools\Utility.Random.cs" />
+    <Compile Include="Code\Base\UtilityTools\Utility.Verifier.Crc32.cs" />
+    <Compile Include="Code\Base\UtilityTools\Utility.Verifier.cs" />
     <Compile Include="Code\Base\UtilityTools\Variable\CGenericVariable.cs" />
     <Compile Include="Code\Base\UtilityTools\Variable\CVariable.cs" />
     <Compile Include="Code\Download\CDownloadEvent.cs" />
@@ -106,8 +110,11 @@
     <Compile Include="Code\Resource\CLoadBinaryCallbacks.cs" />
     <Compile Include="Code\Resource\CLoadSceneCallbacks.cs" />
     <Compile Include="Code\Resource\CLoadAssetCallbacks.cs" />
-    <Compile Include="Code\Resource\CPackageVersionListSerialize.cs" />
+    <Compile Include="Code\Resource\CResourceMgr.ResourceVerifier.VerifierInfo.cs" />
+    <Compile Include="Code\Resource\CResourceMgr.ResourceVerifier.cs" />
+    <Compile Include="Code\Resource\VersionList\CPackageVersionListSerialize.cs" />
     <Compile Include="Code\Resource\CResourceMgr.CReourceIniter.cs" />
+    <Compile Include="Code\Resource\CResourceMgr.CResourceGroup.cs" />
     <Compile Include="Code\Resource\CResourceMgr.ResourceLoader.LoadBinaryInfo.cs" />
     <Compile Include="Code\Resource\CResourceMgr.Enum.cs" />
     <Compile Include="Code\Resource\CResourceMgr.AssetInfo.cs" />
@@ -127,17 +134,24 @@
     <Compile Include="Code\Resource\IResourceGroupCollection.cs" />
     <Compile Include="Code\Resource\IResourceHelper.cs" />
     <Compile Include="Code\Resource\IResourceMgr.cs" />
-    <Compile Include="Code\Resource\SPackageVersionList.ResourceGroup.cs" />
-    <Compile Include="Code\Resource\SPackageVersionList.FileSystem.cs" />
-    <Compile Include="Code\Resource\SPackageVersionList.Resource.cs" />
-    <Compile Include="Code\Resource\SPackageVersionList.Asset.cs" />
-    <Compile Include="Code\Resource\SPackageVersionList.cs" />
+    <Compile Include="Code\Resource\Serializer\CResourceMgr.VersionListSerializer.cs" />
+    <Compile Include="Code\Resource\VersionList\CReadWriteVersionListSerializer.cs" />
+    <Compile Include="Code\Resource\VersionList\CUpdatableVersionListSerializer.cs" />
+    <Compile Include="Code\Resource\VersionList\SVersionList.ResourceGroup.cs" />
+    <Compile Include="Code\Resource\VersionList\SVersionList.FileSystem.cs" />
+    <Compile Include="Code\Resource\VersionList\SVersionList.Resource.cs" />
+    <Compile Include="Code\Resource\VersionList\SVersionList.Asset.cs" />
+    <Compile Include="Code\Resource\VersionList\SUpdatableVersionList.cs" />
+    <Compile Include="Code\Resource\VersionList\SPackageVersionList.cs" />
+    <Compile Include="Code\Resource\CResourceMgr.VersionListProcessor.cs" />
+    <Compile Include="Code\Resource\VersionList\SLocalVersionList.cs" />
     <Compile Include="Code\WebRequest\CWebRequestEvent.cs" />
     <Compile Include="Code\WebRequest\CWebRequestMgr.cs" />
     <Compile Include="Code\WebRequest\CWebRequestMgr.RequestAgent.cs" />
     <Compile Include="Code\WebRequest\CWebRequestMgr.RequestTask.cs" />
     <Compile Include="Code\WebRequest\IWebRequestAgentHelper.cs" />
     <Compile Include="Code\WebRequest\IWebRequestMgr.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />

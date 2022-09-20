@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using static XCFrameworkBase.SVersionList;
 
 namespace XCFrameworkBase
 {
     [StructLayout(LayoutKind.Auto)]
-    public partial struct SPackageVersionList
+    public struct SPackageVersionList
     {
         private static readonly SAsset[] EmptyAssetArray = new SAsset[] { };
         private static readonly SResource[] EmptyResourceArray = new SResource[] { };
@@ -113,4 +114,5 @@ namespace XCFrameworkBase
             return m_ResourceGroups;
         }
     }
+
 }

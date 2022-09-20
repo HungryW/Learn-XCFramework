@@ -48,6 +48,8 @@ namespace XCFrameworkBase
             get;
         }
 
+        SFileInfo GetFileInfo(string a_szName);
+
         bool HasFile(string a_szName);
 
         byte[] ReadFile(string a_szName);

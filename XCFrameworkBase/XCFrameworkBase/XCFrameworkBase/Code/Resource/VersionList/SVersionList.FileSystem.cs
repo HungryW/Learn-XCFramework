@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 
 namespace XCFrameworkBase
 {
-    public partial struct SPackageVersionList
+    public partial struct SVersionList
     {
         /// <summary>
         /// 名字 和 资源索引s

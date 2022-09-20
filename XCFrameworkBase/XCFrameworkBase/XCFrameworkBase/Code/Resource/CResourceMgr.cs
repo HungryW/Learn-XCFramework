@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace XCFrameworkBase
 {
     public sealed partial class CResourceMgr : CGameFrameworkModule, IResourceMgr
     {
-        private const string RemoteVersionListFileName = "GameFrameworkVersion.dat";
-        private const string DefaultExtension = "dat";
+        private const string ms_szRemoteVersionListFileName = "GameFrameworkVersion.dat";
+        private const string ms_szLocalVersionListFileName = "GameFrameworkList.dat";
+        private const string ms_szDefaultExtension = "dat";
+        private const string ms_szTempExtension = "tmp";
 
         private Dictionary<string, CAssetInfo> m_mapAssetInfo;
         private Dictionary<SResourceName, CResourceInfo> m_mapResourceInfo;
@@ -16,6 +19,9 @@ namespace XCFrameworkBase
 
         private string m_szReadOnlyPath;
         private string m_szReadWritePath;
+        private string m_szUpdatePrefixUri;
+
+        private MemoryStream m_streamCached;
 
         private EResourceMode m_eResourceMode;
 
@@ -24,6 +30,8 @@ namespace XCFrameworkBase
         private DecrptResourceCallback m_fnDecryptResource;
 
         private CPackageVersionListSerialize m_PackageVersionSerialize;
+        private CUpdatableVersionListSerializer m_UpdatableVersionSerialize;
+        private CReadWriteVersionListSerializer m_ReadWriteVersionSerialize;
 
         public CResourceMgr()
         {
@@ -32,6 +40,10 @@ namespace XCFrameworkBase
             m_eResourceMode = EResourceMode.Updatable;
             m_fnDecryptResource = null;
             m_ResourceHelper = null;
+            m_PackageVersionSerialize = null;
+            m_szUpdatePrefixUri = null;
+            m_UpdatableVersionSerialize = null;
+            m_ReadWriteVersionSerialize = null;
         }
 
         private CResourceGroup _GetOrAddResourceGroup(string a_szResourceGroupName)
@@ -84,6 +96,25 @@ namespace XCFrameworkBase
         private IFileSystem _GetFileSystem(string a_szFileSystemName, bool a_bStorageInReadOnly)
         {
             return null;
+        }
+
+        private void _PrepareCacheStream()
+        {
+            if (m_streamCached == null)
+            {
+                m_streamCached = new MemoryStream();
+            }
+            m_streamCached.Position = 0L;
+            m_streamCached.SetLength(0L);
+        }
+
+        private void _FreeChachStream()
+        {
+            if (m_streamCached != null)
+            {
+                m_streamCached.Dispose();
+                m_streamCached = null;
+            }
         }
     }
 }

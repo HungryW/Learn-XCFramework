@@ -381,7 +381,7 @@ namespace XCFrameworkBase
                 if (resourceInfo.UseFileSystem)
                 {
                     a_outBInFileSystem = true;
-                    a_outszRelativePath = CUtility.Text.Format("{0}.{1}", resourceInfo.FileSystemName, DefaultExtension);
+                    a_outszRelativePath = CUtility.Text.Format("{0}.{1}", resourceInfo.FileSystemName, ms_szDefaultExtension);
                     a_outszFileName = resourceInfo.ResourceName.FullName;
                 }
                 else
