@@ -13,6 +13,10 @@ namespace XCFrameworkBase
 
         private Dictionary<string, CAssetInfo> m_mapAssetInfo;
         private Dictionary<SResourceName, CResourceInfo> m_mapResourceInfo;
+        private SortedDictionary<SResourceName, SReadWriteResourceInfo> m_mapReadWriteResInfo;
+
+        //private Dictionary<string, IFileSystem> m_mapReadOnlyFileSystem;
+        private Dictionary<string, IFileSystem> m_mapReadWriteFileSystem;
 
         private string m_szApplicationGameVersion;
         private int m_nInternalResourceVersion;
@@ -25,6 +29,7 @@ namespace XCFrameworkBase
 
         private EResourceMode m_eResourceMode;
 
+        private IFileSystemMgr m_refFileSysMgr;
         private IResourceHelper m_ResourceHelper;
 
         private DecrptResourceCallback m_fnDecryptResource;
@@ -32,6 +37,7 @@ namespace XCFrameworkBase
         private CPackageVersionListSerialize m_PackageVersionSerialize;
         private CUpdatableVersionListSerializer m_UpdatableVersionSerialize;
         private CReadWriteVersionListSerializer m_ReadWriteVersionSerialize;
+        private CReadOnlyVersionListSerializer m_ReadOnlyVersionSerialize;
 
         public CResourceMgr()
         {
@@ -44,6 +50,10 @@ namespace XCFrameworkBase
             m_szUpdatePrefixUri = null;
             m_UpdatableVersionSerialize = null;
             m_ReadWriteVersionSerialize = null;
+            //m_mapReadOnlyFileSystem = null;
+            m_mapReadWriteFileSystem = null;
+            m_refFileSysMgr = null;
+            m_ReadOnlyVersionSerialize = null;
         }
 
         private CResourceGroup _GetOrAddResourceGroup(string a_szResourceGroupName)

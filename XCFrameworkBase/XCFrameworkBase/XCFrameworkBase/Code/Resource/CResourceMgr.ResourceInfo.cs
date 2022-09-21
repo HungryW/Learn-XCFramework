@@ -19,6 +19,10 @@ namespace XCFrameworkBase
 
         }
 
+        /// <summary>
+        /// 读取资源列表文件时创建的信息 
+        /// 包含 资源名,文件系统名,LoadType,Len,Hash,压缩Len,压缩Hash, 是否在只读区, 是否准备就绪
+        /// </summary>
 
         private sealed class CResourceInfo
         {

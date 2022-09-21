@@ -110,8 +110,13 @@
     <Compile Include="Code\Resource\CLoadBinaryCallbacks.cs" />
     <Compile Include="Code\Resource\CLoadSceneCallbacks.cs" />
     <Compile Include="Code\Resource\CLoadAssetCallbacks.cs" />
+    <Compile Include="Code\Resource\CResourceMgr.ResourceChecker.CheckInfo.LocalVersionInfo.cs" />
+    <Compile Include="Code\Resource\CResourceMgr.ResourceChecker.CheckInfo.RemoteVersionInfo.cs" />
+    <Compile Include="Code\Resource\CResourceMgr.ResourceChecker.CheckInfo.cs" />
+    <Compile Include="Code\Resource\CResourceMgr.ReadWriteResourceInfo.cs" />
     <Compile Include="Code\Resource\CResourceMgr.ResourceVerifier.VerifierInfo.cs" />
     <Compile Include="Code\Resource\CResourceMgr.ResourceVerifier.cs" />
+    <Compile Include="Code\Resource\CResourceMgr.ResourceChecker.cs" />
     <Compile Include="Code\Resource\VersionList\CPackageVersionListSerialize.cs" />
     <Compile Include="Code\Resource\CResourceMgr.CReourceIniter.cs" />
     <Compile Include="Code\Resource\CResourceMgr.CResourceGroup.cs" />
@@ -135,6 +140,7 @@
     <Compile Include="Code\Resource\IResourceHelper.cs" />
     <Compile Include="Code\Resource\IResourceMgr.cs" />
     <Compile Include="Code\Resource\Serializer\CResourceMgr.VersionListSerializer.cs" />
+    <Compile Include="Code\Resource\VersionList\CReadOnlyVersionListSerializer.cs" />
     <Compile Include="Code\Resource\VersionList\CReadWriteVersionListSerializer.cs" />
     <Compile Include="Code\Resource\VersionList\CUpdatableVersionListSerializer.cs" />
     <Compile Include="Code\Resource\VersionList\SVersionList.ResourceGroup.cs" />
@@ -151,7 +157,6 @@
     <Compile Include="Code\WebRequest\CWebRequestMgr.RequestTask.cs" />
     <Compile Include="Code\WebRequest\IWebRequestAgentHelper.cs" />
     <Compile Include="Code\WebRequest\IWebRequestMgr.cs" />
-    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />

@@ -6,6 +6,12 @@ namespace XCFrameworkBase
 {
     public partial class CResourceMgr
     {
+        /// <summary>
+        /// 校验读写区的资源
+        /// 根据读写区的本地资源列表文件,校验本地读写区资源的crc是否相等
+        /// 主要接口只有一个校验资源,
+        /// 先加载资源列表文件,然后根据资源列表文件读取相应的资源,做CRC校验
+        /// </summary>
         private sealed partial class CResourceVerifier
         {
             private const int mc_nCacheHashBytesLen = 4;
