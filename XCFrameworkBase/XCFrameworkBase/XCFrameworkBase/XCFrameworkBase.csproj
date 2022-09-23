@@ -114,9 +114,12 @@
     <Compile Include="Code\Resource\CResourceMgr.ResourceChecker.CheckInfo.RemoteVersionInfo.cs" />
     <Compile Include="Code\Resource\CResourceMgr.ResourceChecker.CheckInfo.cs" />
     <Compile Include="Code\Resource\CResourceMgr.ReadWriteResourceInfo.cs" />
+    <Compile Include="Code\Resource\CResourceMgr.ResourceUpdater.UpdateInfo.cs" />
+    <Compile Include="Code\Resource\CResourceMgr.ResourceUpdater.cs" />
     <Compile Include="Code\Resource\CResourceMgr.ResourceVerifier.VerifierInfo.cs" />
     <Compile Include="Code\Resource\CResourceMgr.ResourceVerifier.cs" />
     <Compile Include="Code\Resource\CResourceMgr.ResourceChecker.cs" />
+    <Compile Include="Code\Resource\CResourceMgr.ResourceUpdater.ApplyInfo.cs" />
     <Compile Include="Code\Resource\VersionList\CPackageVersionListSerialize.cs" />
     <Compile Include="Code\Resource\CResourceMgr.CReourceIniter.cs" />
     <Compile Include="Code\Resource\CResourceMgr.CResourceGroup.cs" />
